@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Pro | Finalizar Pedido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-stroke: rgba(255, 255, 255, 0.15);
+            --accent: #00f2fe;
+            --accent-glow: rgba(0, 242, 254, 0.4);
+        }
+
+        body {
+            background: #050505;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .glass-container {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid var(--glass-stroke);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 0 20px var(--accent-glow);
+            outline: none;
+        }
+
+        .btn-glow {
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 30px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Animação de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Estilo para opções do select */
+        select option { background: #111; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="glass-container w-full max-w-xl p-6 md:p-10 animate-in">
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-white">Checkout</h1>
+            <p class="text-slate-400 mt-1">Conclua a sua encomenda em segundos</p>
+        </div>
+        <div class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-accent border border-white/10">
+            Seguro & Encriptado
+        </div>
+    </div>
+
+    <!-- Produto em Destaque -->
+    <div class="mb-8 p-5 rounded-2xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        
+        <div class="flex justify-between items-center gap-4">
+            <div class="flex-1">
+                <span class="text-[10px] text-cyan-400 font-bold uppercase mb-1 block">Produto Selecionado</span>
+                <h3 id="prod-nome" class="text-xl font-bold text-white truncate">Catálogo Carregando...</h3>
+                <p id="prod-preco-unit" class="text-sm text-slate-400">R$ 0,00</p>
+            </div>
+            
+            <div class="flex flex-col items-center bg-black/40 p-3 rounded-xl border border-white/10">
+                <span class="text-[9px] uppercase font-bold text-slate-500 mb-2">Quantidade</span>
+                <div class="flex items-center gap-3">
+                    <button onclick="changeQty(-1)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center border border-white/10">-</button>
+                    <input type="number" id="quantidade" value="1" min="1" readonly class="bg-transparent w-8 text-center font-bold text-lg outline-none">
+                    <button onclick="changeQty(1)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center border border-white/10">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário -->
+    <form id="orderForm" class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-400 ml-1">Nome Completo</label>
+                <input type="text" id="nome" required placeholder="Ex: João Silva" class="input-field w-full p-4 rounded-2xl text-white">
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-400 ml-1">Telemóvel / WhatsApp</label>
+                <input type="tel" id="contato" required placeholder="(83) 9 9999-9999" class="input-field w-full p-4 rounded-2xl text-white">
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-400 ml-1">Endereço de Entrega</label>
+            <input type="text" id="endereco" required placeholder="Rua, Número, Bairro e Cidade" class="input-field w-full p-4 rounded-2xl text-white">
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-400 ml-1">Método de Pagamento</label>
+            <select id="pagamento" required class="input-field w-full p-4 rounded-2xl text-white appearance-none cursor-pointer">
+                <option value="" disabled selected>Selecione uma opção...</option>
+                <option value="Pix">🔥 Pix (Aprovação Imediata)</option>
+                <option value="Cartão">💳 Cartão de Crédito / Débito</option>
+                <option value="Dinheiro">💵 Dinheiro (Pagar na Entrega)</option>
+            </select>
+        </div>
+
+        <!-- Resumo Financeiro -->
+        <div class="mt-8 pt-6 border-t border-white/10 space-y-3">
+            <div class="flex justify-between text-sm text-slate-400">
+                <span>Subtotal</span>
+                <span id="subtotal">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-sm text-slate-400">
+                <span>Taxa de Entrega</span>
+                <span class="text-green-400">GRÁTIS</span>
+            </div>
+            <div class="flex justify-between items-end pt-2">
+                <span class="text-lg font-bold text-white">Total a Pagar</span>
+                <span id="valor-total" class="text-3xl font-black text-white" style="text-shadow: 0 0 20px var(--accent-glow);">R$ 0,00</span>
+            </div>
+        </div>
+
+        <!-- Botão de Ação -->
+        <button type="submit" class="btn-glow w-full py-5 bg-white text-black font-black rounded-2xl uppercase tracking-tighter text-lg flex items-center justify-center gap-3">
+            <span>Enviar Pedido</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+    </form>
+</div>
+
+<script>
+    // Recuperação de dados via URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemData = {
+        desc: urlParams.get('item') || "Produto do Catálogo",
+        preco: parseFloat(urlParams.get('preco')) || 0.00
+    };
+
+    // Referências DOM
+    const fields = {
+        nome: document.getElementById('nome'),
+        contato: document.getElementById('contato'),
+        endereco: document.getElementById('endereco'),
+        pagamento: document.getElementById('pagamento'),
+        qtd: document.getElementById('quantidade'),
+        totalTxt: document.getElementById('valor-total'),
+        subtotalTxt: document.getElementById('subtotal'),
+        prodNome: document.getElementById('prod-nome'),
+        prodPreco: document.getElementById('prod-preco-unit')
+    };
+
+    // Persistência: Carregar dados salvos anteriormente
+    window.addEventListener('DOMContentLoaded', () => {
+        fields.nome.value = localStorage.getItem('user_nome') || '';
+        fields.contato.value = localStorage.getItem('user_tel') || '';
+        fields.endereco.value = localStorage.getItem('user_end') || '';
+        
+        fields.prodNome.innerText = itemData.desc;
+        fields.prodPreco.innerText = `Valor Unitário: R$ ${itemData.preco.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
+        updatePrices();
+    });
+
+    // Função de alterar quantidade com botões
+    function changeQty(val) {
+        let current = parseInt(fields.qtd.value);
+        if (current + val >= 1) {
+            fields.qtd.value = current + val;
+            updatePrices();
+        }
+    }
+
+    // Atualização de Preços
+    function updatePrices() {
+        const total = itemData.preco * parseInt(fields.qtd.value);
+        const formatada = total.toLocaleString('pt-PT', { style: 'currency', currency: 'BRL' });
+        fields.totalTxt.innerText = formatada;
+        fields.subtotalTxt.innerText = formatada;
+    }
+
+    // Máscara Simples para Telefone
+    fields.contato.addEventListener('input', (e) => {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+
+    // Envio do Pedido
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Guardar para a próxima compra
+        localStorage.setItem('user_nome', fields.nome.value);
+        localStorage.setItem('user_tel', fields.contato.value);
+        localStorage.setItem('user_end', fields.endereco.value);
+
+        const agora = new Date();
+        const dataStr = agora.toLocaleString('pt-PT');
+        const numPedido = Math.floor(1000 + Math.random() * 9000);
+        const totalFinal = (itemData.preco * parseInt(fields.qtd.value)).toFixed(2);
+
+        // Formatação do Template de Recibo solicitado
+        const template = `NOME DO ESTABELECIMENTO
+             ENDEREÇO
+      JOÃO PESSOA - PARAÍBA
+--------------------------------
+Emissão: ${dataStr}
+Pedido No: ${numPedido}
+--------------------------------
+    DANFE NFC-e - Relatório
+      Auxiliar de Pedido
+--------------------------------
+ITEM COD DESC QTD UN VL.UN VL.TOT
+--------------------------------
+001 001 ${itemData.desc.toUpperCase().padEnd(10).substring(0,10)} ${fields.qtd.value}UND ${itemData.preco.toFixed(2).padStart(6)} ${totalFinal.padStart(7)}
+--------------------------------
+SUBTOTAL R$                   ${totalFinal.padStart(7)}
+TAXA ENTREGA R$                0.00
+VALOR TOTAL R$                ${totalFinal.padStart(7)}
+--------------------------------
+FORMA PAGAMENTO         VALOR PAGO
+${fields.pagamento.value.padEnd(15)}        ${totalFinal}
+--------------------------------
+CLIENTE: ${fields.nome.value.toUpperCase()}
+END: ${fields.endereco.value.toUpperCase()}
+TEL: ${fields.contato.value}
+--------------------------------
+Pagamento será feito: ${fields.pagamento.value.toUpperCase()}
+--------------------------------
+Emissão: ${dataStr}
+Pedido No: ${numPedido}
+--------------------------------`;
+
+        const fone = "558399999999";
+        const link = `https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(template)}`;
+        
+        // Efeito de feedback antes de redirecionar
+        const btn = e.target.querySelector('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "<span>Processando...</span>";
+        btn.disabled = true;
+
+        setTimeout(() => {
+            window.open(link, '_blank');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 800);
+    });
+</script>
+
+</body>
+</html>
