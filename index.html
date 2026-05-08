@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout Pro | Finalizar Pedido</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
+        rel="stylesheet"
+    />
+
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.08);
@@ -14,13 +20,19 @@
             --accent-glow: rgba(0, 242, 254, 0.4);
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            margin: 0;
             background: #050505;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+
             font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #ffffff;
+            color: white;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -29,32 +41,39 @@
         }
 
         .glass-container {
-            background: var(--glass);
+            width: 100%;
+            max-width: 720px;
+            background: rgba(255,255,255,0.08);
             backdrop-filter: blur(20px) saturate(160%);
-            -webkit-backdrop-filter: blur(20px) saturate(160%);
-            border: 1px solid var(--glass-stroke);
+            border: 1px solid rgba(255,255,255,0.15);
             border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
         .input-field {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
             transition: all 0.3s ease;
         }
 
         .input-field:focus {
             border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255,255,255,0.07);
             box-shadow: 0 0 20px var(--accent-glow);
             outline: none;
         }
 
-        /* Remove setas padrão do input number */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        select {
+            background: #111111 !important;
+            color: white !important;
+        }
+
+        select option {
+            background: #111111;
+            color: white;
         }
 
         .btn-qty {
@@ -62,156 +81,274 @@
             transition: all 0.2s ease;
             user-select: none;
         }
+
         .btn-qty:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
         }
-        .btn-qty:active {
-            transform: scale(0.9);
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* REMOVE AS SETAS DO INPUT NUMBER */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
         }
     </style>
 </head>
 <body>
 
-<div class="glass-container w-full max-w-xl p-6 md:p-10">
-    <div class="flex justify-between items-start mb-8">
+<div class="glass-container">
+
+    <div class="flex justify-between items-start mb-8 gap-4">
         <div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-white">Checkout</h1>
-            <p class="text-slate-400 mt-1">Conclua a sua encomenda em segundos</p>
+            <h1 class="text-3xl font-extrabold text-white">
+                Checkout
+            </h1>
+
+            <p class="text-slate-400 mt-1">
+                Finalize seu pedido em segundos
+            </p>
         </div>
-        <div class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-accent border border-white/10">
-            Seguro & Encriptado
+
+        <div class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/10">
+            Seguro
         </div>
     </div>
 
-    <!-- Secção do Produto -->
-    <div class="mb-8 p-5 rounded-2xl bg-black/30 border border-white/5 flex justify-between items-center gap-4">
-        <div class="flex-1">
-            <span class="text-[10px] text-cyan-400 font-bold uppercase mb-1 block">Produto Selecionado</span>
-            <h3 id="display-nome" class="text-xl font-bold text-white truncate">A carregar...</h3>
-            <p id="display-preco-unit" class="text-sm text-slate-400">R$ 0,00</p>
+    <div class="mb-8 p-5 rounded-2xl bg-black/30 border border-white/5 flex justify-between items-center gap-4 flex-wrap">
+
+        <div class="flex-1 min-w-[200px]">
+            <span class="text-[10px] text-cyan-400 font-bold uppercase mb-1 block">
+                Produto Selecionado
+            </span>
+
+            <h3 id="display-nome" class="text-2xl font-bold text-white truncate">
+                Produto Premium
+            </h3>
+
+            <p id="display-preco-unit" class="text-sm text-slate-400 mt-1">
+                Valor Unitário: R$ 97,00
+            </p>
         </div>
-        
-        <div class="flex flex-col items-center bg-black/40 p-3 rounded-xl border border-white/10 min-w-[130px]">
-            <span class="text-[9px] uppercase font-bold text-slate-500 mb-2 tracking-wider">Quantidade</span>
+
+        <div class="flex flex-col items-center bg-black/40 p-3 rounded-xl border border-white/10 min-w-[140px]">
+
+            <span class="text-[10px] uppercase font-bold text-slate-500 mb-2 tracking-wider">
+                Quantidade
+            </span>
+
             <div class="flex items-center gap-4">
-                <!-- Atribuição direta da função no onclick para evitar falhas de carregamento -->
-                <button type="button" onclick="alterarQuantidade(-1)" class="btn-qty w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white text-xl font-bold">−</button>
-                <input type="number" id="input-qtd" value="1" min="1" readonly class="bg-transparent w-8 text-center font-bold text-lg outline-none text-white">
-                <button type="button" onclick="alterarQuantidade(1)" class="btn-qty w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white text-xl font-bold">+</button>
+
+                <button type="button" onclick="alterarQuantidade(-1)" class="btn-qty w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white text-xl font-bold">
+                    −
+                </button>
+
+                <input
+                    type="number"
+                    id="input-qtd"
+                    value="1"
+                    min="1"
+                    readonly
+                    class="bg-transparent w-8 text-center font-bold text-lg outline-none text-white"
+                >
+
+                <button type="button" onclick="alterarQuantidade(1)" class="btn-qty w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white text-xl font-bold">
+                    +
+                </button>
             </div>
         </div>
     </div>
 
     <form id="main-form" class="space-y-5">
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
             <div class="space-y-2">
-                <label class="text-xs font-semibold text-slate-400 ml-1">Nome Completo</label>
-                <input type="text" id="nome" required placeholder="Ex: João Silva" class="input-field w-full p-4 rounded-2xl text-white">
+                <label class="text-xs font-semibold text-slate-400 ml-1">
+                    Nome Completo
+                </label>
+
+                <input type="text" id="nome" required placeholder="Ex: João Silva" class="input-field p-4 rounded-2xl">
             </div>
+
             <div class="space-y-2">
-                <label class="text-xs font-semibold text-slate-400 ml-1">Telemóvel / WhatsApp</label>
-                <input type="tel" id="telefone" required placeholder="(83) 9 9999-9999" class="input-field w-full p-4 rounded-2xl text-white">
+                <label class="text-xs font-semibold text-slate-400 ml-1">
+                    WhatsApp do Cliente
+                </label>
+
+                <input type="tel" id="telefone" required placeholder="(83) 99999-9999" class="input-field p-4 rounded-2xl">
             </div>
         </div>
 
         <div class="space-y-2">
-            <label class="text-xs font-semibold text-slate-400 ml-1">Endereço de Entrega</label>
-            <input type="text" id="endereco" required placeholder="Rua, Número, Bairro e Cidade" class="input-field w-full p-4 rounded-2xl text-white">
+            <label class="text-xs font-semibold text-slate-400 ml-1">
+                Endereço de Entrega
+            </label>
+
+            <input type="text" id="endereco" required placeholder="Rua, Número, Bairro e Cidade" class="input-field p-4 rounded-2xl">
         </div>
 
+       
         <div class="space-y-2">
-            <label class="text-xs font-semibold text-slate-400 ml-1">Método de Pagamento</label>
-            <select id="pagamento" required class="input-field w-full p-4 rounded-2xl text-white cursor-pointer outline-none">
-                <option value="" disabled selected>Selecione uma opção...</option>
-                <option value="Pix">Pix</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                <option value="Dinheiro">Dinheiro</option>
-            </select>
+            <label class="text-xs font-semibold text-slate-400 ml-1">
+                Método de Pagamento
+            </label>
+
+            <div class="relative">
+
+                <select
+                    id="pagamento"
+                    required
+                    class="input-field p-4 rounded-2xl cursor-pointer outline-none appearance-none pr-12">
+                
+                    <option value="Selecione uma opção..."> Selecione uma opção...</option>
+                    <option value="Pix">⚡ Pix</option>
+                    <option value="Cartão de Crédito">💳 Cartão de Crédito</option>
+                    <option value="Dinheiro">💵 Dinheiro</option>
+                </select>
+
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    ▼
+                </div>
+
+            </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-white/10 space-y-3">
+
+       <div class="mt-8 pt-6 border-t border-white/10 space-y-3">
+
             <div class="flex justify-between text-sm text-slate-400">
                 <span>Subtotal</span>
-                <span id="txt-subtotal">R$ 0,00</span>
+                <span id="txt-subtotal">R$ 97,00</span>
             </div>
+
             <div class="flex justify-between text-sm text-slate-400">
                 <span>Taxa de Entrega</span>
                 <span class="text-green-400 font-bold">GRÁTIS</span>
             </div>
+
             <div class="flex justify-between items-end pt-2">
-                <span class="text-lg font-bold text-white">Total a Pagar</span>
-                <span id="txt-total" class="text-3xl font-black text-white">0,00 R$</span>
+                <span class="text-lg font-bold text-white">
+                    Total a Pagar
+                </span>
+
+                <span id="txt-total" class="text-3xl font-black text-white">
+                    R$ 97,00
+                </span>
             </div>
         </div>
 
-        <button type="submit" class="w-full py-5 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-lg flex items-center justify-center gap-3 hover:bg-slate-200 transition-all">
+        <button type="submit" class="submit-btn w-full py-5 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-lg flex items-center justify-center gap-3 hover:bg-slate-200 transition-all">
             <span>ENVIAR PEDIDO</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
+
     </form>
 </div>
 
 <script>
-    // Captura dos parâmetros da URL
-    const params = new URLSearchParams(window.location.search);
-    const precoUnitario = parseFloat(params.get('preco')) || 0.00;
-    const nomeProduto = params.get('item') || "Produto Selecionado";
 
-    // Função global para ser acedida pelos botões
+    const params = new URLSearchParams(window.location.search);
+
+    const precoUnitario = parseFloat(params.get('preco')) || 97;
+
+    const nomeProduto = params.get('item') || 'Produto Premium';
+
+
+    document.getElementById('display-nome').innerText = nomeProduto;
+
+    document.getElementById('display-preco-unit').innerText =
+        `Valor Unitário: R$ ${precoUnitario.toFixed(2).replace('.', ',')}`;
+
+
     function alterarQuantidade(valor) {
+
         const inputQtd = document.getElementById('input-qtd');
+
         let atual = parseInt(inputQtd.value);
+
         let novaQtd = atual + valor;
-        
+
         if (novaQtd >= 1) {
             inputQtd.value = novaQtd;
             atualizarValores();
         }
     }
 
+
     function atualizarValores() {
+
         const qtd = parseInt(document.getElementById('input-qtd').value);
-        const totalCalculado = (precoUnitario * qtd).toFixed(2).replace('.', ',');
-        
-        document.getElementById('txt-subtotal').innerText = `R$ ${totalCalculado}`;
-        document.getElementById('txt-total').innerText = `${totalCalculado} R$`;
+
+        const total = (precoUnitario * qtd)
+            .toFixed(2)
+            .replace('.', ',');
+
+        document.getElementById('txt-subtotal').innerText = `R$ ${total}`;
+
+        document.getElementById('txt-total').innerText = `R$ ${total}`;
     }
 
-    // Inicialização da página
-    window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('display-nome').innerText = nomeProduto;
-        document.getElementById('display-preco-unit').innerText = `Valor Unitário: R$ ${precoUnitario.toFixed(2).replace('.', ',')}`;
-        atualizarValores();
+
+    atualizarValores();
+
+
+    document.getElementById('telefone').addEventListener('input', (e) => {
+
+        let v = e.target.value.replace(/\D/g, '');
+
+        v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+
+        v = v.replace(/(\d)(\d{4})$/, '$1-$2');
+
+        e.target.value = v;
     });
 
-    // Máscara de Telefone
-    document.getElementById('telefone').oninput = (e) => {
-        let v = e.target.value.replace(/\D/g, '');
-        v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-        v = v.replace(/(\d)(\d{4})$/, "$1-$2");
-        e.target.value = v;
-    };
 
-    // Envio do Formulário para WhatsApp
-    document.getElementById('main-form').onsubmit = (e) => {
+    document.getElementById('main-form').addEventListener('submit', (e) => {
+
         e.preventDefault();
+
         const qtdFinal = document.getElementById('input-qtd').value;
-        const totalFinal = (precoUnitario * qtdFinal).toFixed(2).replace('.', ',');
-        
-        const mensagem = `*NOVO PEDIDO*\n` +
-                         `--------------------------\n` +
-                         `*Produto:* ${nomeProduto}\n` +
-                         `*Quantidade:* ${qtdFinal}\n` +
-                         `*Total:* R$ ${totalFinal}\n` +
-                         `--------------------------\n` +
-                         `*Cliente:* ${document.getElementById('nome').value}\n` +
-                         `*WhatsApp:* ${document.getElementById('telefone').value}\n` +
-                         `*Endereço:* ${document.getElementById('endereco').value}\n` +
-                         `*Pagamento:* ${document.getElementById('pagamento').value}`;
-        
-        const numeroWhatsApp = "558399999999"; // Substitua pelo seu número
-        window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`, '_blank');
-    };
+
+        const totalFinal = (precoUnitario * qtdFinal)
+            .toFixed(2)
+            .replace('.', ',');
+
+
+        const numeroWhatsApp = document
+            .getElementById('telefone')
+            .value
+            .replace(/\D/g, '');
+
+
+        const mensagem =
+            `*NOVO PEDIDO*\n` +
+            `--------------------------\n` +
+            `*Produto:* ${nomeProduto}\n` +
+            `*Quantidade:* ${qtdFinal}\n` +
+            `*Total:* R$ ${totalFinal}\n` +
+            `--------------------------\n` +
+            `*Cliente:* ${document.getElementById('nome').value}\n` +
+            `*WhatsApp Cliente:* ${document.getElementById('telefone').value}\n` +
+            `*Endereço:* ${document.getElementById('endereco').value}\n` +
+            `*Pagamento:* ${document.getElementById('pagamento').value}`;
+
+
+        const whatsappURL =
+            `https://web.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
+
+
+        window.open(whatsappURL, '_blank');
+    });
+
 </script>
 
 </body>
