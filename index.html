@@ -342,36 +342,13 @@
             `*Pagamento:* ${document.getElementById('pagamento').value}`;
 
 
-    /*    const whatsappURL =
+       const whatsappURL =
             `https://wa.me/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
 
 
         window.open(whatsappURL, '_blank');
-    }); */
+    }); 
 
-                    // REMOVE TUDO QUE NÃO FOR NÚMERO
-            const numeroLimpo = numeroWhatsApp.replace(/\D/g, '');
-            
-            const mensagemCodificada = encodeURIComponent(mensagem);
-            
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            
-            let whatsappURL = "";
-            
-            if(isMobile){
-            
-                // APP
-                whatsappURL =
-                    `whatsapp://wa.me/send?phone=${numeroLimpo}&text=${mensagemCodificada}`;
-            
-            }else{
-            
-                // WEB
-                whatsappURL =
-                    `https://web.whatsapp.com/send?phone=${numeroLimpo}&text=${mensagemCodificada}`;
-            }
-
-        window.location.href = whatsappURL;
 
 </script>
 
