@@ -354,29 +354,14 @@
         
             // APP
            const mensagemCodificada = encodeURIComponent(mensagem);
-        
-        // NÚMERO FIXO DA LOJA
-        const numeroLoja = "558391438527";
-        
-        const isMobile =
-        /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        
-        let whatsappURL = "";
-        
-        if(isMobile){
-        
-            // CELULAR → APP WHATSAPP
-            whatsappURL =
-        `https://api.whatsapp.com/send?phone=${numeroLoja}&text=${mensagemCodificada}`;
-        
-        }else{
-        
-            // DESKTOP → WHATSAPP WEB
-            whatsappURL =
-        `https://web.whatsapp.com/send?phone=${numeroLoja}&text=${mensagemCodificada}`;
-        }
-        
-        window.open(whatsappURL, '_blank');
+                   
+            // NÚMERO FIXO DA LOJA
+            const numeroLoja = "558391438527";
+            
+            const whatsappURL =
+            `https://wa.me/${numeroLoja}?text=${mensagemCodificada}`;
+            
+            window.open(whatsappURL, '_blank');
 
 
 </script>
