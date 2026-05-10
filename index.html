@@ -314,55 +314,37 @@
 
     document.getElementById('main-form').addEventListener('submit', (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        const qtdFinal = document.getElementById('input-qtd').value;
+    const qtdFinal = document.getElementById('input-qtd').value;
 
-        const totalFinal = (precoUnitario * qtdFinal)
-            .toFixed(2)
-            .replace('.', ',');
+    const totalFinal = (precoUnitario * qtdFinal)
+        .toFixed(2)
+        .replace('.', ',');
 
+    const mensagem =
+        `*NOVO PEDIDO*\n` +
+        `--------------------------\n` +
+        `*Produto:* ${nomeProduto}\n` +
+        `*Quantidade:* ${qtdFinal}\n` +
+        `*Total:* R$ ${totalFinal}\n` +
+        `--------------------------\n` +
+        `*Cliente:* ${document.getElementById('nome').value}\n` +
+        `*WhatsApp Cliente:* ${document.getElementById('telefone').value}\n` +
+        `*Endereço:* ${document.getElementById('endereco').value}\n` +
+        `*Pagamento:* ${document.getElementById('pagamento').value}`;
 
-        const numeroWhatsApp = document
-            .getElementById('telefone')
-            .value
-            .replace(/\D/g, '');
+    const mensagemCodificada =
+        encodeURIComponent(mensagem);
 
+    const numeroLoja = "558391438527";
 
-        const mensagem =
-            `*NOVO PEDIDO*\n` +
-            `--------------------------\n` +
-            `*Produto:* ${nomeProduto}\n` +
-            `*Quantidade:* ${qtdFinal}\n` +
-            `*Total:* R$ ${totalFinal}\n` +
-            `--------------------------\n` +
-            `*Cliente:* ${document.getElementById('nome').value}\n` +
-            `*WhatsApp Cliente:* ${document.getElementById('telefone').value}\n` +
-            `*Endereço:* ${document.getElementById('endereco').value}\n` +
-            `*Pagamento:* ${document.getElementById('pagamento').value}`;
+    const whatsappURL =
+        `https://wa.me/${numeroLoja}?text=${mensagemCodificada}`;
 
-        const numeroLimpo = numeroWhatsApp.replace(/\D/g, '');
+    window.open(whatsappURL, '_blank');
 
-        const mensagemCodificada = encodeURIComponent(mensagem);
-        
-        const isMobile =
-        /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        
-        let whatsappURL = "";
-        
-        if(isMobile){
-        
-            // APP
-           const mensagemCodificada = encodeURIComponent(mensagem);
-                   
-            // NÚMERO FIXO DA LOJA
-            const numeroLoja = "558391438527";
-            
-            const whatsappURL =
-            `https://wa.me/${numeroLoja}?text=${mensagemCodificada}`;
-            
-            window.open(whatsappURL, '_blank');
-
+});
 
 </script>
 
