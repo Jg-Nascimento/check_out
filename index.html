@@ -358,7 +358,7 @@
         if(isMobile){
             // abre APP no celular
             whatsappURL =
-                `whatsapp://send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
+                `https://wa.me/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
         }else{
             // abre WhatsApp Web no desktop
             whatsappURL =
