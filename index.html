@@ -353,25 +353,30 @@
         if(isMobile){
         
             // APP
+           const mensagemCodificada = encodeURIComponent(mensagem);
+        
+        // NÚMERO FIXO DA LOJA
+        const numeroLoja = "558391438527";
+        
+        const isMobile =
+        /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        let whatsappURL = "";
+        
+        if(isMobile){
+        
+            // CELULAR → APP WHATSAPP
             whatsappURL =
-        `https://api.whatsapp.com/send?phone=558391438527&text=${mensagemCodificada}`;
+        `https://api.whatsapp.com/send?phone=${numeroLoja}&text=${mensagemCodificada}`;
         
         }else{
         
-            // WEB
+            // DESKTOP → WHATSAPP WEB
             whatsappURL =
-        `https://web.whatsapp.com/send?phone=558391438527&text=${mensagemCodificada}`;
+        `https://web.whatsapp.com/send?phone=${numeroLoja}&text=${mensagemCodificada}`;
         }
         
         window.open(whatsappURL, '_blank');
-
-
-    /*   const whatsappURL =
-            `https://wa.me/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
-
-
-        window.open(whatsappURL, '_blank');
-    }); */
 
 
 </script>
