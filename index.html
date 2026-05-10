@@ -349,22 +349,28 @@
         window.open(whatsappURL, '_blank');
     }); */
 
-        const mensagemCodificada = encodeURIComponent(mensagem);
+                    // REMOVE TUDO QUE NÃO FOR NÚMERO
+            const numeroLimpo = numeroWhatsApp.replace(/\D/g, '');
+            
+            const mensagemCodificada = encodeURIComponent(mensagem);
+            
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            let whatsappURL = "";
+            
+            if(isMobile){
+            
+                // APP
+                whatsappURL =
+                    `whatsapp://wa.me/send?phone=${numeroLimpo}&text=${mensagemCodificada}`;
+            
+            }else{
+            
+                // WEB
+                whatsappURL =
+                    `https://web.whatsapp.com/send?phone=${numeroLimpo}&text=${mensagemCodificada}`;
+            }
 
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        
-        let whatsappURL = "";
-        
-        if(isMobile){
-            // abre APP no celular
-            whatsappURL =
-                `https://wa.me/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
-        }else{
-            // abre WhatsApp Web no desktop
-            whatsappURL =
-                `https://web.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
-        }
-        
         window.location.href = whatsappURL;
 
 </script>
